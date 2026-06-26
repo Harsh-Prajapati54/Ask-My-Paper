@@ -23,5 +23,6 @@ for chunk in input_text:
     embedding.append(response.embeddings)
     
 print(f"Total number of chunks embedded: {len(embedding)}")
-print(f"Embedding dimension: {len(embedding[0])}") # prints the dimension of the embedding vector
+print(f"Embedding dimension: {len(embedding[0])}")# prints the dimension of the embedding vector
+print(len(embedding[0][0]))
 print(f"Embedding vector for first chunk: {embedding[0]}") # prints the embedding vector for the first chunk
