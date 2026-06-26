@@ -1,4 +1,4 @@
-from loader import PDFLoader, loader
+from loader import *
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # chunking strategy 
@@ -16,7 +16,20 @@ def chunk_document(file_path):
     text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,  # maximum size of each chunk
             chunk_overlap=200,  # overlap between chunks
-            length_function=len  # function to calculate the length of each chunk
+            length_function=len,
+             separators=[
+                        "\n\n",
+                        "\n",
+                        " ",
+                        ".",
+                        ",",
+                        "\u200b",  # Zero-width space
+                        "\uff0c",  # Fullwidth comma
+                        "\u3001",  # Ideographic comma
+                        "\uff0e",  # Fullwidth full stop
+                        "\u3002",  # Ideographic full stop
+                        "",
+                            ]# function to calculate the length of each chunk
              
     )
     
@@ -28,4 +41,21 @@ def chunk_document(file_path):
 
     return all_chunks
 
-print(chunk_document(file_path))
+
+
+if __name__ == "__main__":
+     print(chunk_document(file_path))
+     print(f"Total chunks: {len(chunk_document(file_path))}") # Total no of chunks generated from the document
+
+    # Load specific chunk 
+     print(f"Chunk 1: {chunk_document(file_path)[-1]},\n Length of chunk : {len(chunk_document(file_path)[-1])}") # Load the first chunk
+    
+    
+    
+    # prints the length of each chunk 
+     """ for chunk in chunk_document(file_path):
+        print(f"Chunk length: {len(chunk)}") """
+        
+# print(type(chunk_document(file_path))) # prints the type of the chunks generated from the document
+# print(len(chunk_document(file_path))) # prints the total number of chunks generated from the document
+# print(type(chunk_document(file_path)[0])) # prints the type of the first chunk generated from the document
