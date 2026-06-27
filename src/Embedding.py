@@ -20,9 +20,14 @@ for chunk in input_text:
         model='nomic-embed-text',
         input=chunk,
     )
-    embedding.append(response.embeddings)
+    embedding.append(response.embeddings[0])
     
-print(f"Total number of chunks embedded: {len(embedding)}")
-print(f"Embedding dimension: {len(embedding[0])}")# prints the dimension of the embedding vector
-print(len(embedding[0][0]))
-print(f"Embedding vector for first chunk: {embedding[0]}") # prints the embedding vector for the first chunk
+
+if __name__ == "__main__":
+    print(f"Embedding vector for first chunk: {embedding[0]}") # prints the embedding vector for the first chunk    
+    print(f"Total number of chunks embedded: {len(embedding)}")
+    print(type(embedding))
+    print(type(embedding[0]))
+    print(type(embedding[0][0]))
+    print("Embedding dimension:" ,len(embedding[0]))# prints the dimension of the embedding vector
+    
