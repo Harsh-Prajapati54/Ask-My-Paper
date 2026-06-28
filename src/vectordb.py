@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from loader import *
 from chunking import *
 from Embedding import *
@@ -5,44 +7,57 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams,PointStruct,Document
 import ollama
 
+load_dotenv()
+Qdrant_Api = os.getenv("QDRANT_API")
+Qdrant_Url = os.getenv("QDRANT_URL")
 # Connect to Qdrant Cloud
 client = QdrantClient(
-    url= "https://1b80c87a-05f2-49a5-81bd-e145c0d5287c.us-east-2-0.aws.cloud.qdrant.io",
-    api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6ZTA1MmVlYTktYzA3Yi00MTMzLWI2MmQtNjg5Zjk3ZDQ2NjhhIn0.r46jfIWu3lXFvYRhehXpPm7gSW42QwDRWb3Lw3F55f8",
+    url= Qdrant_Url,
+    api_key=Qdrant_Api,
     cloud_inference= True
 )
 #calling embedding function
 embedding = embed_doc(file_path)
 Embedding_dim = len(embedding[0])
 
-COLLECTION_NAME = "book" # name of collection
+COLLECTION_NAME = "DOCS" # name of collection
 # create Collection 
-client.create_collection(
-    collection_name=COLLECTION_NAME,
-    vectors_config=VectorParams(
-        size=Embedding_dim,
-        distance = Distance.COSINE   
+client.delete_collection("book")
+if not client.collection_exists(COLLECTION_NAME):
+    client.create_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=VectorParams(
+            size=Embedding_dim,
+            distance = Distance.COSINE   
     )
 )
 
 
 input_text = chunk_document(file_path)
+def upsert_embeddings(client, collection_name: str, embeddings: list, chunks: list, batch_size: int = 100):
 
-points = [
+    points = [
     PointStruct(
         id=i,
-        vector=embedding[i],
-        payload={"text": input_text[i]}  # store anything here
+        vector=embeddings[i],
+        payload={"text": chunks[i]}  # store anything here
     )
-    for i in range(len(embedding))
-]
-
-client.upsert(
-    collection_name=COLLECTION_NAME,
-    points=points
+    for i in range(len(embeddings))
+    ]
+    
+    for i in range(0,len(points),batch_size):
+        batch = points[i : i + batch_size]
+        client.upsert(
+        collection_name=COLLECTION_NAME,
+        points=batch
 )
 
-query_vector = embed_doc("what is attention mechanism?")  # your embedding function
+embeddings, chunks = embed_doc(file_path)
+print(type(embeddings[0]))      # should be list, not str
+print(embeddings[0][:3])        # should be [0.123, 0.456, 0.789], not text
+upsert_embeddings(client, "DOCS", embeddings, chunks)
+
+query_vector = embed_query("what is attention mechanism?")  # your embedding function
 
 results = client.search(
     collection_name=COLLECTION_NAME,

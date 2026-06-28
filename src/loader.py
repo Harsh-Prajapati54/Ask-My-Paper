@@ -33,7 +33,7 @@ class PDFLoader:
     
 if __name__ == "__main__":
     # File Path to your PDF file
-    file_path = r"Data\llm.pdf"
+    file_path = r"C:\Ask My Paper\Data\Copy of AI Engineering-25-125.pdf"
 
     loader = PDFLoader(file_path)
     document = loader.load_pdf()
