@@ -12,18 +12,22 @@ from loader import *
     parameters: 137M
     context window: 2048 tokens
 """
-embedding = []
-
-input_text = chunk_document(file_path)
-for chunk in input_text:
-    response = ollama.embed(
+def embed_doc(file_path: str) -> list[list[float]]:
+    embedding = []
+    input_text = chunk_document(file_path)
+    for chunk in input_text:
+        response = ollama.embed(
         model='nomic-embed-text',
         input=chunk,
-    )
-    embedding.append(response.embeddings[0])
+        )
+        embedding.append(response.embeddings[0])
+    
+    return embedding
     
 
+
 if __name__ == "__main__":
+    embedding = embed_doc(file_path)
     print(f"Embedding vector for first chunk: {embedding[0]}") # prints the embedding vector for the first chunk    
     print(f"Total number of chunks embedded: {len(embedding)}")
     print(type(embedding))
