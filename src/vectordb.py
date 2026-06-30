@@ -5,6 +5,7 @@ from chunking import *
 from Embedding import *
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams,PointStruct
+import pandas as pd
 
 load_dotenv()
 Qdrant_Api = os.getenv("QDRANT_API")
@@ -12,11 +13,11 @@ Qdrant_Url = os.getenv("QDRANT_URL")
 # Connect to Qdrant Cloud
 client = QdrantClient(
     url= Qdrant_Url,
-    api_key=Qdrant_Api
+    api_key=Qdrant_Api,
+    timeout=60
 )
 #calling embedding function
 
-client.delete_collection("DOCS")  # run this once
 COLLECTION_NAME = "DOCS" # name of collection
 # create Collection 
 if not client.collection_exists(COLLECTION_NAME):
@@ -28,7 +29,7 @@ if not client.collection_exists(COLLECTION_NAME):
     )
 )
 
-def upsert_embeddings(client, collection_name: str, embeddings: list, chunks: list, batch_size: int = 100):
+def upsert_embeddings(client, collection_name: str, embeddings: list, chunks: list, batch_size: int = 50):
 
     points = [
     PointStruct(
@@ -53,12 +54,20 @@ upsert_embeddings(client, "DOCS", embeddings, chunks)
 
 query_vector = embed_query("what is attention mechanism?")  # your embedding function
 
-results = client.search(
+results = client.query_points(
     collection_name=COLLECTION_NAME,
-    query_vector=query_vector,
+    query=query_vector,
     limit=5,
     with_payload=True
 )
 
-for r in results:
-    print(r.score, r.payload["text"])
+data = [
+    {"score":r.score,"text":r.payload["text"]}
+    for r in results.points
+]
+
+if __name__ == "__main__":
+    
+    df = pd.DataFrame(data)
+    print(df)
+    print(type(df))
