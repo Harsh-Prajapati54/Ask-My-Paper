@@ -44,18 +44,30 @@ def chunk_document(file_path):
 
 
 if __name__ == "__main__":
-     print(chunk_document(file_path))
-     print(f"Total chunks: {len(chunk_document(file_path))}") # Total no of chunks generated from the document
-
-    # Load specific chunk 
-     print(f"Chunk 1: {chunk_document(file_path)[-1]},\n Length of chunk : {len(chunk_document(file_path)[-1])}") # Load the first chunk
+    chunks = chunk_document(file_path)
+    print(f"Total chunks: {len(chunks)}") # Total no of chunks generated
     
+    CHECK = "lengths"  # options: "total", "chunk", "lengths, "all"
     
-    
+   
+    if CHECK == "total":  # prints the total number of chunks generated
+        print(f"Total chunks: {len(chunks)}")
+        
+    elif CHECK == "chunk":
+        idx = 397  # index of the chunk you want to load
+        print(f"Chunk {idx}: {chunks[idx]}")
+        
+    elif CHECK == "lengths":
+        for c in chunks:  # length of each chunk
+            print(f"Chunk length: {len(c)}")
+            
+    elif CHECK == "all":  # LOAD ALL CHUNKS
+        for idx, c in enumerate(chunks):
+            print(f"Chunk {idx}: {c}")
+   
     # prints the length of each chunk 
-     """ for chunk in chunk_document(file_path):
+    """ for chunk in chunk_document(file_path):
         print(f"Chunk length: {len(chunk)}") """
         
-# print(type(chunk_document(file_path))) # prints the type of the chunks generated from the document
-# print(len(chunk_document(file_path))) # prints the total number of chunks generated from the document
-# print(type(chunk_document(file_path)[0])) # prints the type of the first chunk generated from the document
+    # print(type(chunk_document(file_path))) # prints the type of the chunks generated from the document
+    # print(type(chunk_document(file_path)[0])) # prints the type of the first chunk generated from the document

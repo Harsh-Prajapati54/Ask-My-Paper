@@ -11,7 +11,7 @@ class Retriever:
         self.chunks = chunks
         self.rrf_k = rrf_k
         self.bm25 = BM25Okapi([c.lower().split() for c in chunks])
-        self.reranker = Ranker(model_name="ms-marco-MiniLM-L-6-v3")
+        self.reranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2")
         
     def dense_rank(self, query: str, top_k:int = 25) -> list[int]:
         dense_results = dense_search(query, top_k=top_k)
@@ -50,4 +50,4 @@ class Retriever:
 if __name__ == "__main__":
     chunks = chunk_document(file_path)
     retriever = Retriever(chunks)
-    print(retriever.retrieve("What is the main contribution of the paper?"))
+    print(retriever.retrieve("what is prompt engineering?"))
