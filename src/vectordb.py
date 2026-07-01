@@ -52,22 +52,23 @@ print(type(embeddings[0]))      # should be list, not str
 print(embeddings[0][:3])        # should be [0.123, 0.456, 0.789], not text
 upsert_embeddings(client, "DOCS", embeddings, chunks)
 
-query_vector = embed_query("what is attention mechanism?")  # your embedding function
+def dense_search(query: str,top_k:int = 25) -> pd.DataFrame:
+    query_vector = embed_query(query)  # your embedding function
 
-results = client.query_points(
+    results = client.query_points(
     collection_name=COLLECTION_NAME,
     query=query_vector,
-    limit=5,
+    limit=top_k,
     with_payload=True
-)
+    )
 
-data = [
-    {"score":r.score,"text":r.payload["text"]}
+    data = [
+    {"id":r.id,"score":r.score,"text":r.payload["text"]}
     for r in results.points
-]
+    ]
+    
+    return pd.DataFrame(data)
 
 if __name__ == "__main__":
     
-    df = pd.DataFrame(data)
-    print(df)
-    print(type(df))
+    print(dense_search("What is the main contribution of the paper?"))
