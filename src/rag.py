@@ -60,7 +60,6 @@ if __name__ == "__main__":
     query = "What is prompt engineering?"
     answer_data = generate_answer(query, retriever, top_k=6)
     
-    
     print("Context:", answer_data["context"])
     print("="*50) 
     print("Query:", answer_data["query"])

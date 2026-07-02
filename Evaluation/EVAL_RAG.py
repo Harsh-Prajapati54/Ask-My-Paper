@@ -39,6 +39,7 @@ for item in eval_set:
     
 dataset = Dataset.from_list(rows)
 
+
 # 3. RAGAS judge — Groq LLM (free) + your existing Ollama embeddings (free, local)
 judge_llm = LangchainLLMWrapper(ChatOpenAI(model="llama-3.3-70b-versatile",
                                            temperature=0.2,
