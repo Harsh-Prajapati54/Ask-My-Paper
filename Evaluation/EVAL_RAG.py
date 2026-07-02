@@ -19,7 +19,7 @@ from rag import generate_answer
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(dotenv_path=env_path)
 
-with open(os.path.join(os.path.dirname(__file__), "..", "data", "Evalquestions.json")) as f:
+with open(os.path.join(os.path.dirname(__file__), "..", "data", "Evalquestion.json")) as f:
     eval_set = json.load(f)
 
 
@@ -33,8 +33,8 @@ for item in eval_set:
     rows.append({
         "question": q,
         "answer": results["answer"],
-        "context": results["context"],
-        "ground_truth": item["answer"]
+        "retrieved_contexts": results["context"],
+        "ground_truth": item["expected_answer"]
     })
     
 dataset = Dataset.from_list(rows)
@@ -53,7 +53,7 @@ results = evaluate(
     dataset = dataset,
     metrics=[faithfulness,answer_relevancy],
     llm = judge_llm,
-    embedding = judge_embedding
+    embeddings = judge_embedding
 )
 
 print("Evaluation Results:",results)
