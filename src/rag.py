@@ -12,7 +12,7 @@ load_dotenv(dotenv_path=env_path)
 
 # using OpenAI's API client to interact with the Groq API for generating answers based on the retrieved context
 client = OpenAI(api_key=os.getenv("GROQ_API"),
-                base_url="https://api.groq.ai/v1")
+                base_url="https://api.groq.com/openai/v1")
 
 
 # building a prompt for the AI assistant to answer the user's query based on the retrieved context from the document chunks
@@ -60,8 +60,12 @@ if __name__ == "__main__":
     query = "What is prompt engineering?"
     answer_data = generate_answer(query, retriever, top_k=6)
     
-    print("Query:", answer_data["query"])
+    
     print("Context:", answer_data["context"])
+    print("="*50) 
+    print("Query:", answer_data["query"])
+    print("="*50)
     print("Answer:", answer_data["answer"])
+    print("="*50)
     
     print(f"total time: {time.time() - start_time:.2f} seconds")
