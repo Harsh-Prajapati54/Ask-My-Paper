@@ -7,8 +7,8 @@ from rank_bm25 import BM25Okapi
 from flashrank import Ranker , RerankRequest
 
 class Retriever:
-    def __init__(self, chunks: list[str], rrf_k:int = 60):
-        self.chunks = chunks
+    def __init__(self,  rrf_k:int = 60):
+        self.chunks = load_chunks_from_qdrant()
         self.rrf_k = rrf_k
         self.bm25 = BM25Okapi([c.lower().split() for c in chunks])
         self.reranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2")
@@ -48,6 +48,6 @@ class Retriever:
     
     
 if __name__ == "__main__":
-    chunks = chunk_document(file_path)
-    retriever = Retriever(chunks)
+    
+    retriever = Retriever()
     print(retriever.retrieve("what is prompt engineering?"))
