@@ -47,7 +47,7 @@ if __name__ == "__main__":
     chunks = chunk_document(file_path)
     print(f"Total chunks: {len(chunks)}") # Total no of chunks generated
     
-    CHECK = "lengths"  # options: "total", "chunk", "lengths, "all"
+    CHECK = "chunk"  # options: "total", "chunk", "lengths, "all"
     
    
     if CHECK == "total":  # prints the total number of chunks generated
@@ -65,9 +65,6 @@ if __name__ == "__main__":
         for idx, c in enumerate(chunks):
             print(f"Chunk {idx}: {c}")
    
-    # prints the length of each chunk 
-    """ for chunk in chunk_document(file_path):
-        print(f"Chunk length: {len(chunk)}") """
         
-    # print(type(chunk_document(file_path))) # prints the type of the chunks generated from the document
-    # print(type(chunk_document(file_path)[0])) # prints the type of the first chunk generated from the document
+    print(f"data type of chunks: {type(chunks)}") # prints the type of the chunks generated from the document
+   

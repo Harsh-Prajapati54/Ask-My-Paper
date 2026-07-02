@@ -37,8 +37,8 @@ class Retriever:
         return ranked_ids
     
     def retrieve(self,query:str,top_k:int = 6,fusion_pool: int = 25) -> pd.DataFrame:
-        dense_ids = self.dense_rank(query, top_k)
-        bm25_ids = self.bm25_rank(query, top_k)
+        dense_ids = self.dense_rank(query, fusion_pool)
+        bm25_ids = self.bm25_rank(query, fusion_pool)
         final_ids = self.rrf_rank(dense_ids, bm25_ids)[:fusion_pool]
         
         passages = [{"id":id,"text":self.chunks[id]} for id in final_ids]
