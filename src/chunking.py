@@ -67,4 +67,3 @@ if __name__ == "__main__":
    
         
     print(f"data type of chunks: {type(chunks)}") # prints the type of the chunks generated from the document
-   

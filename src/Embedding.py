@@ -2,7 +2,6 @@ import ollama
 from chunking import *
 from loader import *
 
-
 """ 
     IN this Module we will be embedding the document chunks into a vector database for semantic search and retrieval.
     I am using Ollma's nomic-embed-text-embedding-3-large model for embedding the document chunks into a vector database.
