@@ -12,7 +12,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 
 # load retriever and generate_answer function from src/rag.py
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
-from retriver import Retriever
+from retriever import Retriever
 from rag import generate_answer
 
 # load environment variables from .env file
