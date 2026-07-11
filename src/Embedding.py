@@ -1,6 +1,6 @@
 import ollama
-from chunking import *
-from loader import *
+from .chunking import *
+from .loader import *
 
 """ 
     IN this Module we will be embedding the document chunks into a vector database for semantic search and retrieval.

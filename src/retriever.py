@@ -1,7 +1,7 @@
 #imports 
 import pandas as pd
-from vectordb import *
-from loader import *
+from .vectordb import *
+from .loader import *
 from chunking import *
 from rank_bm25 import BM25Okapi
 from flashrank import Ranker , RerankRequest
@@ -49,5 +49,6 @@ class Retriever:
     
 if __name__ == "__main__":
     
+    query = "what is prompt engineering?"
     retriever = Retriever()
-    print(retriever.retrieve("what is prompt engineering?"))
+    print(retriever.retrieve(query))

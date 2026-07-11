@@ -1,4 +1,4 @@
-from loader import *
+from .loader import *
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # chunking strategy 

@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
-from loader import *
-from chunking import *
-from Embedding import *
+from .loader import *
+from .chunking import *
+from .Embedding import *
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, List, VectorParams,PointStruct
 import pandas as pd
