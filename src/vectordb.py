@@ -10,7 +10,11 @@ import pandas as pd
 load_dotenv()
 Qdrant_Api = os.getenv("QDRANT_API")
 Qdrant_Url = os.getenv("QDRANT_URL")
+print("CWD:", os.getcwd())
+print("URL:", repr(Qdrant_Url))
+print("API SET:", Qdrant_Api is not None)
 # Connect to Qdrant Cloud
+
 client = QdrantClient(
     url= Qdrant_Url,
     api_key=Qdrant_Api,

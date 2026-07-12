@@ -2,10 +2,10 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from src.retriever import Retriever
-from loader import PDFLoader
-from chunking import *
-from Generation import build_prompt
-from vectordb import *
+from src.loader import PDFLoader
+from src.chunking import *
+from Generation.Prompt import build_messages
+from src.vectordb import *
 
 # using dotenv to load environment variables from .env file
 env_path = os.path.join(os.path.dirname(__file__), "..",'.env')
@@ -16,15 +16,14 @@ client = OpenAI(api_key=os.getenv("GROQ_API"),
                 base_url="https://api.groq.com/openai/v1")
 
 
-
 # generating an answer to the user's query by retrieving relevant context from the document chunks and using the AI assistant to provide a response
 def generate_answer(query: str, retriever: Retriever, top_k: int = 6) -> dict:
     results = retriever.retrieve(query, top_k=top_k)
     context = results["text"].tolist()
-    prompt = build_prompt(query, context)
+    messages = build_messages(query, context)
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        messages=[{"role": "user", "content": prompt}],
+        messages=messages,
         temperature=0.2,
         max_tokens=350
 
@@ -35,14 +34,10 @@ def generate_answer(query: str, retriever: Retriever, top_k: int = 6) -> dict:
         "context": context,
         "answer": response.choices[0].message.content.strip()
     }
-    
-    
+      
 # main function to demonstrate the retrieval and answer generation process
 if __name__ == "__main__":
     
-    from time import time
-    start_time = time.time()
-
     retriever = Retriever()
     
     query = "What is prompt engineering?"
@@ -54,5 +49,4 @@ if __name__ == "__main__":
     print("="*50)
     print("Answer:", answer_data["answer"])
     print("="*50)
-    
-    print(f"total time: {time.time() - start_time:.2f} seconds")
+        
