@@ -49,4 +49,4 @@ if __name__ == "__main__":
     print("="*50)
     print("Answer:", answer_data["answer"])
     print("="*50)
-        
+    print("*" * 50)
