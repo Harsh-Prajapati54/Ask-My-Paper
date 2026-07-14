@@ -26,7 +26,6 @@ def generate_answer(query: str, retriever: Retriever, top_k: int = 6) -> dict:
         messages=messages,
         temperature=0.2,
         max_tokens=350
-
     )
     # returning the query, context, and the AI assistant's answer as a dictionary
     return {
